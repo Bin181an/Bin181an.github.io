@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出行卡片</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .trip-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transport-type {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-info {
+            text-align: right;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .route-section {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .route-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .station {
+            text-align: center;
+            flex: 1;
+        }
+
+        .station-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .station-time {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .station-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .route-arrow {
+            flex: 0 0 60px;
+            text-align: center;
+            font-size: 20px;
+            color: #999;
+        }
+
+        .trip-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #1976d2;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .seats {
+            background: #e3f2fd;
+            border-left-color: #1976d2;
+        }
+
+        .seats .detail-value {
+            color: #1976d2;
+            font-size: 16px;
+        }
+
+        .service-section {
+            background: #fff3cd;
+            padding: 15px;
+            border-top: 1px solid #ffeaa7;
+        }
+
+        .service-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .service-content {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .service-phone {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            color: #1976d2;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .service-script {
+            flex: 1;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.3;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .flight-card .route-main {
+            margin-bottom: 15px;
+        }
+
+        .airport-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .airport {
+            text-align: center;
+        }
+
+        .special-notice {
+            background: #ffebee;
+            border: 1px solid #ffcdd2;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .special-notice-icon {
+            font-size: 20px;
+            color: #d32f2f;
+        }
+
+        .special-notice-text {
+            flex: 1;
+            font-size: 13px;
+            color: #d32f2f;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+            .trip-container {
+                margin: 0;
+                padding: 5px;
+            }
+            
+            .route-main {
+                flex-direction: row;
+                gap: 10px;
+                align-items: center;
+            }
+            
+            .route-arrow {
+                flex: 0 0 30px;
+                font-size: 18px;
+            }
+            
+            .station {
+                flex: 1;
+                text-align: center;
+            }
+            
+            .trip-details {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .service-content {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="trip-container">
+        
+
+        <div class="trip-card">
+            <div class="card-header">
+                <div class="transport-type">🚄 高铁 G2031</div>
+                <div class="date-info">2025年12月3日 周三</div>
+            </div>
+            
+            <div class="route-section">
+                <div class="route-main">
+                    <div class="station">
+                        <div class="station-name">驻马店西站</div>
+                        <div class="station-time">09:14</div>
+                        <div class="station-date">出发</div>
+                    </div>
+                    
+                    <div class="route-arrow">→</div>
+                    
+                    <div class="station">
+                        <div class="station-name">汉口站</div>
+                        <div class="station-time">11:00</div>
+                        <div class="station-date">到达</div>
+                    </div>
+                </div>
+                
+                <div class="trip-details">
+                    <div class="detail-item">
+                        <div class="detail-label">行程时长</div>
+                        <div class="detail-value">1小时46分</div>
+                    </div>
+                    
+                    <div class="detail-item seats">
+                        <div class="detail-label">座位信息</div>
+                        <div class="detail-value">04车02D、04车02F</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="service-section">
+                <div class="service-title">📞 车站服务预约</div>
+                <div class="service-content">
+                    <div class="service-phone">0396-2527066</div>
+                    <div class="service-script">
+                        话术：乘客是轮椅行动障碍旅客，自备轮椅，需来指引帮助引导进站
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="trip-card flight-card">
+            <div class="card-header">
+                <div class="transport-type">✈️ 飞机 HU7068</div>
+                <div class="date-info">2025年12月4日 周四</div>
+            </div>
+            
+            <div class="route-section">
+                <div class="route-main">
+                    <div class="station">
+                        <div class="station-name">武汉天河机场</div>
+                        <div class="station-time">12:00</div>
+                        <div class="station-date">T2航站楼 出发</div>
+                    </div>
+                    
+                    <div class="route-arrow">→</div>
+                    
+                    <div class="station">
+                        <div class="station-name">海口美兰机场</div>
+                        <div class="station-time">14:40</div>
+                        <div class="station-date">T2航站楼 到达</div>
+                    </div>
+                </div>
+                
+                <div class="trip-details">
+                    <div class="detail-item">
+                        <div class="detail-label">飞行时长</div>
+                        <div class="detail-value">2小时40分</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="service-section">
+                <div class="service-title">✈️ 机场服务信息</div>
+                <div class="service-content">
+                    <div class="service-phone">027-96577</div>
+                    <div class="service-script">
+                        现场服务：可从2号门进入二层出发大厅，向问询岛申请
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="trip-card">
+            <div class="card-header">
+                <div class="transport-type">🚄 高铁 C7885</div>
+                <div class="date-info">2025年12月4日 周四</div>
+            </div>
+            
+            <div class="route-section">
+                <div class="route-main">
+                    <div class="station">
+                        <div class="station-name">美兰站</div>
+                        <div class="station-time">16:12</div>
+                        <div class="station-date">出发</div>
+                    </div>
+                    
+                    <div class="route-arrow">→</div>
+                    
+                    <div class="station">
+                        <div class="station-name">三亚站</div>
+                        <div class="station-time">17:50</div>
+                        <div class="station-date">到达</div>
+                    </div>
+                </div>
+                
+                <div class="trip-details">
+                    <div class="detail-item">
+                        <div class="detail-label">行程时长</div>
+                        <div class="detail-value">1小时38分</div>
+                    </div>
+                    
+                    <div class="detail-item seats">
+                        <div class="detail-label">座位信息</div>
+                        <div class="detail-value">06车02D、06车02F</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="service-section">
+                <div class="service-title">📞 车站服务预约</div>
+                <div class="service-content">
+                    <div class="service-phone">0898-31923852</div>
+                    <div class="service-script">
+                        话术：乘客是轮椅行动障碍旅客，自备轮椅，需来指引帮助引导进站
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
