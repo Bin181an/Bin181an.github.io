@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客列表 | Binjian的秘密园地</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="stars"></div>
+        <div class="content">
+            <header>
+                <h1 class="title">博客列表</h1>
+                <div class="divider"></div>
+            </header>
+            <main>
+                
+                <div class="windows-grid">
+                    <article class="window-card" onclick="window.location.href='blog/youxian-ziyuan-shouhu-jiankang.html'">
+                        <div class="window-content">
+                            <div class="window-symbol">🏥</div>
+                            <h2 class="window-title">以有限资源最大程度守护生命健康</h2>
+                            <p class="window-description">讲清楚我国医疗保障的宗旨、基本医保的目标，有助于从根本上清除医保制度被曲解、被误会的土壤。</p>
+                            <div class="window-meta">
+                                <span class="window-date">2025-11-30</span>
+                                <span class="window-tag">原创</span>
+                            </div>
+                        </div>
+                        <div class="window-frame"></div>
+                    </article>
+                    
+                    <article class="window-card" onclick="window.location.href='blog/trip-card-20251213.html'">
+                        <div class="window-content">
+                            <div class="window-symbol">🚄</div>
+                            <h2 class="window-title">2025年12月出行三亚卡片</h2>
+                            <p class="window-description">从驻马店西到三亚的完整出行行程，包含高铁和飞机安排。</p>
+                            <div class="window-meta">
+                                <span class="window-date">2025-12-13</span>
+                                <span class="window-tag">出行</span>
+                            </div>
+                        </div>
+                        <div class="window-frame"></div>
+                    </article>
+                </div>
+                
+                <div class="navigation">
+                    <nav>
+                        <ul>
+                            <li><a href="index.html" class="nav-link">返回首页</a></li>
+                            <li><a href="#" class="nav-link">关于</a></li>
+                            <li><a href="#" class="nav-link" onclick="showQRCode(); return false;">联系</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </main>
+            <footer>
+                <p class="footer-text">© 2025 Binjian的云上园地 - 保留所有权利</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- 二维码弹窗 -->
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-modal-content">
+            <span class="qr-close" onclick="closeQRCode()">&times;</span>
+            <h3 class="qr-title">联系Binjian</h3>
+            <img src="联系二维码.png" alt="联系二维码" class="qr-image">
+            <p class="qr-description">扫描二维码添加联系方式</p>
+        </div>
+    </div>
+    
+    <script>
+        // 创建动态星空背景
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        window.addEventListener('load', createStars);
+        
+        // 二维码弹窗功能
+        function showQRCode() {
+            document.getElementById('qrModal').style.display = 'block';
+        }
+        
+        function closeQRCode() {
+            document.getElementById('qrModal').style.display = 'none';
+        }
+        
+        // 点击弹窗外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('qrModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

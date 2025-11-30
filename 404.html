@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - 页面未找到 | Binjian的云上园地</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="stars"></div>
+        <div class="content">
+            <header>
+                <h1 class="error-title">404</h1>
+                <div class="divider"></div>
+            </header>
+            <main>
+                <div class="error-content">
+                    <p class="error-message">迷失在神秘的空间中...</p>
+                    <p class="error-description">您寻找的页面似乎已经消失在Binjian的秘密园地深处</p>
+                    <div class="mystery-box">
+                        <div class="box-content">
+                            <p class="mystery-text">别担心，每一条迷路都是新的探索</p>
+                            <button class="explore-btn" onclick="window.location.href='index.html'">返回园地</button>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <nav>
+                            <ul>
+                                <li><a href="index.html" class="nav-link">首页</a></li>
+                                <li><a href="#" class="nav-link">关于</a></li>
+                                <li><a href="#" class="nav-link">发现</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <p class="footer-text">© 2025 Binjian的云上园地 - 保留所有权利</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        // 创建动态星空背景
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        window.addEventListener('load', createStars);
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - 服务器错误 | Binjian的云上园地</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="stars"></div>
+        <div class="content">
+            <header>
+                <h1 class="error-title">500</h1>
+                <div class="divider"></div>
+            </header>
+            <main>
+                <div class="error-content">
+                    <p class="error-message">园地的魔法暂时失灵了...</p>
+                    <p class="error-description">服务器遇到了一些神秘问题，我们正在努力修复</p>
+                    <div class="mystery-box">
+                        <div class="box-content">
+                            <p class="mystery-text">请稍等片刻，神秘的力量正在重新集结</p>
+                            <button class="explore-btn" onclick="window.location.reload()">重试</button>
+                            <button class="explore-btn secondary" onclick="window.location.href='index.html'">返回园地</button>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <nav>
+                            <ul>
+                                <li><a href="index.html" class="nav-link">首页</a></li>
+                                <li><a href="#" class="nav-link">关于</a></li>
+                                <li><a href="#" class="nav-link">发现</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <p class="footer-text">© 2025 Binjian的云上园地 - 保留所有权利</p>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        // 创建动态星空背景
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 100;
+            
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        window.addEventListener('load', createStars);
+        
+        // 自动重试功能
+        let retryCount = 0;
+        const maxRetries = 3;
+        
+        function autoRetry() {
+            if (retryCount < maxRetries) {
+                setTimeout(() => {
+                    retryCount++;
+                    console.log(`自动重试第 ${retryCount} 次...`);
+                    // 这里可以添加实际的重试逻辑
+                }, 5000);
+            }
+        }
+        
+        window.addEventListener('load', autoRetry);
+    </script>
+</body>
+</html>
