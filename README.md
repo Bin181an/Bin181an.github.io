@@ -6,8 +6,6 @@
 
 一个全面的实时定价比较工具，用于比较通过 [OpenRouter API](https://openrouter.ai/) 提供的 400+ AI 语言模型。比较 GPT-4、Claude、Llama、Mistral 和数百种其他模型的成本，为您的 AI 需求找到最具成本效益的解决方案。
 
-**🔗 在线工具: [[https://binjian.cloud]](https://binjian.cloud)**
-
 ## 📊 主要功能
 
 - **实时定价数据**: 每 12 小时自动从 OpenRouter API 更新
