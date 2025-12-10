@@ -86,7 +86,7 @@
 
 ## 🌐 在线网站
 
-在线访问工具：**[https://openrouterlist.jvrck.com/](https://openrouterlist.jvrck.com/)**
+在线访问工具：**[https://binjian.cloud/](https://binjian.cloud/)**
 
 网站功能：
 - 实时搜索和筛选
