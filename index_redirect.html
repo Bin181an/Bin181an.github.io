@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenRouter 模型价格对比工具</title>
+  <meta http-equiv="refresh" content="0; url=index_zh.html">
+  <script>
+    // 检测用户语言偏好
+    function detectLanguage() {
+      const browserLang = navigator.language || navigator.userLanguage;
+      const savedLang = localStorage.getItem('language');
+      
+      // 如果用户之前选择过语言，使用保存的偏好
+      if (savedLang) {
+        return savedLang;
+      }
+      
+      // 根据浏览器语言自动选择
+      if (browserLang.startsWith('zh')) {
+        return 'zh';
+      } else {
+        return 'en';
+      }
+    }
+    
+    // 立即重定向
+    (function() {
+      const lang = detectLanguage();
+      const targetUrl = lang === 'zh' ? 'index_zh.html' : 'index.html';
+      window.location.replace(targetUrl);
+    })();
+  </script>
+</head>
+<body>
+  <div style="text-align: center; margin-top: 50px; font-family: Arial, sans-serif;">
+    <h1>正在跳转到 OpenRouter 模型价格对比工具...</h1>
+    <p>如果页面没有自动跳转，请点击以下链接：</p>
+    <p><a href="index_zh.html">🇨🇳 中文版本</a> | <a href="index.html">🇺🇸 English Version</a></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenRouter 模型价格对比工具 | AI 模型成本计算器</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="对比 OpenRouter 上 400+ AI 模型的价格。GPT-4、Claude、Llama 等模型的实时价格数据。每 12 小时更新一次，显示每百万 tokens 的提示和完成成本。">
+  <meta name="keywords" content="OpenRouter 价格, AI 模型成本, LLM 价格对比, GPT-4 价格, Claude 价格, AI API 成本, 模型对比工具, token 价格计算器, 语言模型成本">
+  <meta name="author" content="OpenRouterList">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://openrouterlist.jvrck.com/">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="OpenRouter 模型价格对比工具">
+  <meta property="og:description" content="对比 400+ AI 模型的实时价格。通过更新的价格数据找到最适合您需求的经济高效 LLM。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://openrouterlist.jvrck.com/">
+  <meta property="og:site_name" content="OpenRouterList">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OpenRouter 模型价格对比">
+  <meta name="twitter:description" content="对比 400+ AI 模型的价格。实时数据每 12 小时更新一次。">
+  <meta name="twitter:url" content="https://openrouterlist.jvrck.com/">
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "OpenRouter 模型价格对比",
+    "description": "对比和分析通过 OpenRouter API 可用的 AI 语言模型价格",
+    "url": "https://openrouterlist.jvrck.com/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "OpenRouterList"
+    }
+  }
+  </script>
+
+  <!-- Include DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+  
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Include DataTables JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.flash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9f9f9;
+      --bg-hover: #f0f0f0;
+      --text-primary: #333333;
+      --text-secondary: #666666;
+      --border-color: #dddddd;
+      --header-bg: #2563eb;
+      --header-text: white;
+      --link-color: #0066cc;
+      --favorite-color: #ffa500;
+      --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #1e1e1e;
+      --bg-secondary: #2d2d2d;
+      --bg-hover: #404040;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b8b8b8;
+      --border-color: #4a4a4a;
+      --header-bg: #3b82f6;
+      --header-text: #ffffff;
+      --link-color: #70b8ff;
+      --favorite-color: #ffd700;
+      --card-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, "Microsoft YaHei", "微软雅黑", sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    h1 {
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .theme-toggle {
+      display: flex;
+      gap: 5px;
+      background-color: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .theme-btn {
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 15px;
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .theme-btn.active {
+      background-color: var(--header-bg);
+      color: white;
+    }
+
+    .density-toggle {
+      display: flex;
+      gap: 5px;
+      background-color: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .density-btn {
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 15px;
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .density-btn.active {
+      background-color: var(--header-bg);
+      color: white;
+    }
+
+    .lang-toggle {
+      display: flex;
+      gap: 5px;
+      background-color: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 5px;
+      border: 1px solid var(--border-color);
+    }
+
+    .lang-btn {
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 15px;
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .lang-btn.active {
+      background-color: var(--header-bg);
+      color: white;
+    }
+
+    .view-toggle {
+      display: none;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .btn:hover {
+      background-color: var(--bg-hover);
+    }
+
+    #favoritesToggle {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .info-section {
+      background-color: var(--bg-secondary);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    .info-section p {
+      margin: 5px 0;
+      color: var(--text-secondary);
+    }
+
+    .info-section a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .info-section a:hover {
+      text-decoration: underline;
+    }
+
+    .column-selector {
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Capability Filter Styles */
+    .capability-filters {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .capability-filters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .capability-filters-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .filter-count-badge {
+      background-color: var(--header-bg);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .filter-count-badge.active {
+      display: inline-block;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-mode-toggle {
+      display: flex;
+      background-color: var(--bg-primary);
+      border-radius: 20px;
+      padding: 3px;
+      border: 1px solid var(--border-color);
+    }
+
+    .filter-mode-btn {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 17px;
+      color: var(--text-primary);
+      font-size: 13px;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+    }
+
+    .filter-mode-btn.active {
+      background-color: var(--header-bg);
+      color: white;
+    }
+
+    .clear-filters-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 13px;
+      transition: background-color 0.2s;
+    }
+
+    .clear-filters-btn:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .capability-checkboxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .capability-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .capability-checkbox:hover {
+      background-color: var(--bg-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .capability-checkbox input {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+
+    .capability-checkbox label {
+      cursor: pointer;
+      color: var(--text-primary);
+      font-size: 14px;
+      user-select: none;
+      flex: 1;
+    }
+
+    .capability-checkbox.checked {
+      background-color: var(--header-bg);
+      border-color: var(--header-bg);
+    }
+
+    .capability-checkbox.checked label {
+      color: white;
+    }
+
+    .filter-presets {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .preset-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .preset-btn:hover {
+      background-color: var(--bg-hover);
+      transform: translateY(-1px);
+    }
+
+    .filter-results-info {
+      padding: 8px 12px;
+      background-color: var(--bg-primary);
+      border-radius: 5px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .filter-results-info.active {
+      display: block;
+    }
+
+    .column-selector h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+    }
+
+    .column-checkboxes {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .column-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-primary);
+    }
+
+    .column-checkbox input {
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      background-color: var(--bg-primary);
+    }
+
+    th {
+      background-color: var(--header-bg) !important;
+      color: var(--header-text) !important;
+      padding: 10px;
+      text-align: left;
+    }
+
+    td {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      background-color: var(--bg-primary);
+    }
+
+    tr {
+      background-color: var(--bg-primary) !important;
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--bg-secondary) !important;
+    }
+
+    tr:nth-child(even) td {
+      background-color: var(--bg-secondary) !important;
+    }
+
+    tr:hover {
+      background-color: var(--bg-hover) !important;
+    }
+
+    tr:hover td {
+      background-color: var(--bg-hover) !important;
+    }
+
+    td a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    td a:hover {
+      text-decoration: underline;
+    }
+
+    .favorite-btn {
+      cursor: pointer;
+      font-size: 18px;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-right: 5px;
+      color: var(--text-secondary);
+      transition: color 0.3s;
+    }
+
+    .favorite-btn.favorited {
+      color: var(--favorite-color);
+    }
+
+    .favorite-btn:hover {
+      color: var(--favorite-color);
+    }
+
+    /* Density Styles */
+    table.density-compact td,
+    table.density-compact th {
+      padding: 4px 8px !important;
+    }
+
+    table.density-comfortable td,
+    table.density-comfortable th {
+      padding: 8px 10px !important;
+    }
+
+    table.density-spacious td,
+    table.density-spacious th {
+      padding: 12px 16px !important;
+    }
+
+    /* Mobile Card View */
+    .card-view {
+      display: none;
+    }
+
+    .model-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .model-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .model-card-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .model-card-title a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .model-card-details {
+      display: grid;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .model-card-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .model-card-label {
+      font-weight: 500;
+    }
+
+    .model-card-value {
+      color: var(--text-primary);
+    }
+
+    /* Keyboard shortcuts modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: var(--bg-primary);
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 80%;
+      max-width: 500px;
+      color: var(--text-primary);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .close {
+      color: var(--text-secondary);
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: var(--text-primary);
+    }
+
+    .shortcuts-list {
+      margin-top: 20px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .shortcut-key {
+      background-color: var(--bg-secondary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    /* Tooltip Styles */
+    .tooltip-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tooltip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--text-secondary);
+      color: var(--bg-primary);
+      font-size: 11px;
+      font-weight: bold;
+      cursor: help;
+      transition: background-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .tooltip-icon:hover {
+      background-color: var(--header-bg);
+    }
+
+    .tooltip-content {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--text-primary);
+      color: var(--bg-primary);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      max-width: 250px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      z-index: 1000;
+      pointer-events: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+
+    .tooltip-content.wide {
+      white-space: normal;
+      text-align: center;
+    }
+
+    .tooltip-content::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: var(--text-primary);
+    }
+
+    .tooltip-wrapper:hover .tooltip-content {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Dark theme tooltip adjustments */
+    [data-theme="dark"] .tooltip-content {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .tooltip-content::after {
+      border-top-color: var(--bg-secondary);
+    }
+
+    /* Capability checkbox with tooltip */
+    .capability-label-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .capability-label-wrapper label {
+      flex: 1;
+    }
+
+    /* Filter mode tooltip */
+    .filter-mode-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Preset button tooltips */
+    .preset-btn-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .preset-btn-wrapper .tooltip-content {
+      bottom: calc(100% + 4px);
+      white-space: normal;
+      min-width: 200px;
+    }
+
+    /* Mobile tooltip adjustments */
+    @media (max-width: 768px) {
+      .tooltip-content {
+        max-width: 200px;
+        font-size: 12px;
+      }
+      
+      /* On mobile, show tooltips on tap */
+      .tooltip-wrapper.mobile-active .tooltip-content {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+
+    /* DataTables overrides for dark mode */
+    [data-theme="dark"] table.dataTable {
+      background-color: var(--bg-primary) !important;
+    }
+
+    [data-theme="dark"] table.dataTable tbody tr {
+      background-color: var(--bg-primary) !important;
+    }
+
+    [data-theme="dark"] table.dataTable tbody tr:nth-child(even) {
+      background-color: var(--bg-secondary) !important;
+    }
+
+    [data-theme="dark"] table.dataTable tbody tr:hover {
+      background-color: var(--bg-hover) !important;
+    }
+
+    [data-theme="dark"] table.dataTable tbody td {
+      background-color: inherit !important;
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .dataTables_wrapper .dataTables_length,
+    [data-theme="dark"] .dataTables_wrapper .dataTables_filter,
+    [data-theme="dark"] .dataTables_wrapper .dataTables_info,
+    [data-theme="dark"] .dataTables_wrapper .dataTables_processing,
+    [data-theme="dark"] .dataTables_wrapper .dataTables_paginate {
+      color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+      color: var(--text-secondary) !important;
+    }
+
+    [data-theme="dark"] .dataTables_wrapper .dataTables_filter input,
+    [data-theme="dark"] .dataTables_wrapper .dataTables_length select {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .dt-buttons .dt-button {
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    [data-theme="dark"] .dt-buttons .dt-button:hover {
+      background-color: var(--bg-hover);
+    }
+
+    /* Modern DataTables Button Styles */
+    .dt-buttons {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .dt-button {
+      padding: 8px 15px !important;
+      border: 1px solid var(--border-color) !important;
+      background-color: var(--bg-secondary) !important;
+      color: var(--text-primary) !important;
+      cursor: pointer !important;
+      border-radius: 8px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      transition: all 0.2s ease !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, "Microsoft YaHei", "微软雅黑", sans-serif !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+
+    .dt-button:hover {
+      background-color: var(--bg-hover) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+
+    .dt-button:active {
+      transform: translateY(0) !important;
+    }
+
+    /* Add icons to buttons */
+    .dt-button.buttons-copy:before {
+      content: "📋";
+      font-size: 16px;
+    }
+
+    .dt-button.buttons-csv:before {
+      content: "📄";
+      font-size: 16px;
+    }
+
+    .dt-button.buttons-excel:before {
+      content: "📊";
+      font-size: 16px;
+    }
+
+    .dt-button.buttons-pdf:before {
+      content: "📑";
+      font-size: 16px;
+    }
+
+    .dt-button.buttons-print:before {
+      content: "🖨️";
+      font-size: 16px;
+    }
+
+    /* Button container positioning */
+    .dataTables_wrapper .dt-buttons {
+      float: none;
+      text-align: left;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .dt-buttons {
+        justify-content: center;
+      }
+      
+      .dt-button {
+        font-size: 13px !important;
+        padding: 6px 12px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .view-toggle {
+        display: block;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .controls {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .theme-toggle,
+      .density-toggle,
+      .lang-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .column-selector {
+        display: none;
+      }
+      
+      .capability-filters {
+        padding: 12px;
+      }
+      
+      .capability-filters-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+      }
+      
+      .filter-controls {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .filter-mode-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .capability-checkboxes {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header" role="banner">
+      <h1>OpenRouter 模型价格对比工具</h1>
+      <div class="controls">
+        <div class="theme-toggle">
+          <button class="theme-btn" data-theme="light">☀️ 浅色</button>
+          <button class="theme-btn" data-theme="dark">🌙 深色</button>
+          <button class="theme-btn" data-theme="system">🖥️ 跟随系统</button>
+        </div>
+        <div class="density-toggle">
+          <button class="density-btn" data-density="compact">紧凑</button>
+          <button class="density-btn active" data-density="comfortable">舒适</button>
+          <button class="density-btn" data-density="spacious">宽松</button>
+        </div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="zh">🇨🇳 中文</button>
+          <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+        </div>
+        <button id="favoritesToggle" class="btn">
+          <span>⭐</span>
+          <span>仅显示收藏</span>
+        </button>
+        <button id="viewToggle" class="btn view-toggle">📱 卡片视图</button>
+        <button id="helpBtn" class="btn" aria-label="显示键盘快捷键">? 帮助</button>
+      </div>
+    </header>
+
+    <section class="info-section" role="region" aria-label="关于此工具">
+      <h2 style="font-size: 1.2em; margin-top: 0; color: var(--text-primary);">实时 AI 模型价格数据</h2>
+      <p id="updatedDate"></p>
+      <p>对比通过 <a href="https://openrouter.ai/" target="_blank" rel="noopener">OpenRouter</a> 可用的 <strong>400+ AI 语言模型</strong> 价格。这个全面的价格对比工具帮助开发者和企业找到最适合其特定需求的经济高效 AI 模型。</p>
+      <p><strong>功能：</strong> 按名称、功能、上下文长度和成本搜索和筛选模型。以多种格式导出数据。显示每百万 tokens 的提示和完成成本。</p>
+      <p>数据每 12 小时自动更新以确保准确性。源代码可在 <a href="https://github.com/jvrck/openrouterlist" target="_blank" rel="noopener">GitHub</a> 上获取。</p>
+    </section>
+
+    <!-- 功能筛选部分 -->
+    <section class="capability-filters" role="region" aria-label="按功能筛选模型">
+      <div class="capability-filters-header">
+        <div class="capability-filters-title">
+          <span>🎯 按功能筛选</span>
+          <span class="filter-count-badge" id="filterCountBadge">0 个激活</span>
+        </div>
+        <div class="filter-controls">
+          <div class="filter-mode-wrapper">
+            <div class="filter-mode-toggle">
+              <button class="filter-mode-btn active" data-mode="all">匹配全部</button>
+              <button class="filter-mode-btn" data-mode="any">匹配任意</button>
+            </div>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">匹配全部：模型必须具备所有选定的功能<br>匹配任意：模型需要至少具备一个选定的功能</div>
+            </div>
+          </div>
+          <button class="clear-filters-btn" id="clearFiltersBtn">清除全部</button>
+        </div>
+      </div>
+      
+      <div class="capability-checkboxes">
+        <div class="capability-checkbox" data-capability="tool_calling">
+          <input type="checkbox" id="filter-tool-calling">
+          <div class="capability-label-wrapper">
+            <label for="filter-tool-calling">🔧 工具调用</label>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">模型可以调用外部函数/API 来执行计算、数据库查询等操作</div>
+            </div>
+          </div>
+        </div>
+        <div class="capability-checkbox" data-capability="structured_outputs">
+          <input type="checkbox" id="filter-structured-outputs">
+          <div class="capability-label-wrapper">
+            <label for="filter-structured-outputs">📋 结构化输出</label>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">模型能够可靠地返回特定格式的数据，如 JSON，遵循精确的模式</div>
+            </div>
+          </div>
+        </div>
+        <div class="capability-checkbox" data-capability="reasoning">
+          <input type="checkbox" id="filter-reasoning">
+          <div class="capability-label-wrapper">
+            <label for="filter-reasoning">🧠 推理能力</label>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">模型展示逐步思考过程，适用于复杂问题解决</div>
+            </div>
+          </div>
+        </div>
+        <div class="capability-checkbox" data-capability="response_format">
+          <input type="checkbox" id="filter-response-format">
+          <div class="capability-label-wrapper">
+            <label for="filter-response-format">📝 响应格式</label>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">模型支持自定义输出格式化指令和模板</div>
+            </div>
+          </div>
+        </div>
+        <div class="capability-checkbox" data-capability="web_search">
+          <input type="checkbox" id="filter-web-search">
+          <div class="capability-label-wrapper">
+            <label for="filter-web-search">🌐 网络搜索</label>
+            <div class="tooltip-wrapper">
+              <span class="tooltip-icon">?</span>
+              <div class="tooltip-content wide">模型可以在对话期间主动搜索互联网获取最新信息</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-presets">
+        <span style="color: var(--text-secondary); font-size: 13px; margin-right: 10px;">快速筛选：</span>
+        <div class="preset-btn-wrapper">
+          <button class="preset-btn" data-preset="agentic">🤖 智能体模型</button>
+          <div class="tooltip-content">筛选具有工具调用 + 结构化输出功能的模型</div>
+        </div>
+        <div class="preset-btn-wrapper">
+          <button class="preset-btn" data-preset="reasoning">💭 推理模型</button>
+          <div class="tooltip-content">筛选具有高级推理能力的模型</div>
+        </div>
+        <div class="preset-btn-wrapper">
+          <button class="preset-btn" data-preset="structured">📊 结构化输出</button>
+          <div class="tooltip-content">筛选支持结构化输出 + 响应格式的模型</div>
+        </div>
+        <div class="preset-btn-wrapper">
+          <button class="preset-btn" data-preset="web">🔍 网络启用</button>
+          <div class="tooltip-content">筛选具有网络搜索功能的模型</div>
+        </div>
+      </div>
+      
+      <div class="filter-results-info" id="filterResultsInfo">
+        <span id="filterResultsText">0 个模型匹配您的筛选条件</span>
+      </div>
+    </section>
+
+    <section class="column-selector" role="region" aria-label="列可见性控制">
+      <h3>显示/隐藏列：</h3>
+      <div class="column-checkboxes">
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="0" checked> 模型 ID
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="1" checked> 模型名称
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="2" checked> 创建时间
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="3" checked> 上下文长度
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="4" checked> 提示成本
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="5" checked> 完成成本
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="6" checked> 工具调用
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="7" checked> 结构化输出
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="8" checked> 推理能力
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="9" checked> 响应格式
+        </label>
+        <label class="column-checkbox">
+          <input type="checkbox" data-column="10" checked> 网络搜索
+        </label>
+      </div>
+    </section>
+
+    <main class="table-view" role="main">
+      <table id="csvTable" class="display" style="width:100%">
+        <thead>
+          <tr id="tableHeaders"></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </main>
+
+    <div class="card-view" id="cardView" role="region" aria-label="模型的卡片视图"></div>
+    
+    <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary);">
+      <p>OpenRouterList - 免费 AI 模型价格对比工具 | 每 12 小时更新</p>
+      <p>
+        <a href="https://github.com/jvrck/openrouterlist" target="_blank" rel="noopener" style="color: var(--link-color);">GitHub</a> | 
+        <a href="https://openrouter.ai/" target="_blank" rel="noopener" style="color: var(--link-color);">OpenRouter API</a> | 
+        <a href="https://openrouter.ai/docs" target="_blank" rel="noopener" style="color: var(--link-color);">API 文档</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- 键盘快捷键模态框 -->
+  <div id="shortcutsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>键盘快捷键</h2>
+      <div class="shortcuts-list">
+        <div class="shortcut-item">
+          <span>聚焦搜索</span>
+          <span class="shortcut-key">/</span>
+        </div>
+        <div class="shortcut-item">
+          <span>切换收藏</span>
+          <span class="shortcut-key">f</span>
+        </div>
+        <div class="shortcut-item">
+          <span>更改主题</span>
+          <span class="shortcut-key">t</span>
+        </div>
+        <div class="shortcut-item">
+          <span>更改密度</span>
+          <span class="shortcut-key">d</span>
+        </div>
+        <div class="shortcut-item">
+          <span>切换视图（移动端）</span>
+          <span class="shortcut-key">v</span>
+        </div>
+        <div class="shortcut-item">
+          <span>导出为 CSV</span>
+          <span class="shortcut-key">e</span>
+        </div>
+        <div class="shortcut-item">
+          <span>聚焦功能筛选</span>
+          <span class="shortcut-key">c</span>
+        </div>
+        <div class="shortcut-item">
+          <span>切换筛选模式</span>
+          <span class="shortcut-key">m</span>
+        </div>
+        <div class="shortcut-item">
+          <span>清除所有筛选</span>
+          <span class="shortcut-key">x</span>
+        </div>
+        <div class="shortcut-item">
+          <span>显示此帮助</span>
+          <span class="shortcut-key">?</span>
+        </div>
+        <div class="shortcut-item">
+          <span>关闭对话框</span>
+          <span class="shortcut-key">Esc</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 全局变量
+    let dataTable;
+    let allData = [];
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let showFavoritesOnly = false;
+    let currentTheme = localStorage.getItem('theme') || 'system';
+    let currentDensity = localStorage.getItem('density') || 'comfortable';
+    let currentLang = localStorage.getItem('language') || 'zh';
+    let columnVisibility = JSON.parse(localStorage.getItem('columnVisibility')) || {};
+    let isCardView = false;
+    
+    // 功能筛选变量
+    let activeCapabilityFilters = [];
+    let capabilityFilterMode = 'all'; // 'all' 或 'any'
+    let isCapabilityFilterActive = false;
+
+    // 语言管理
+    function switchLanguage(lang) {
+      if (lang === 'en') {
+        // 切换到英文版本
+        window.location.href = 'index.html';
+      } else {
+        // 切换到中文版本
+        window.location.href = 'index_zh.html';
+      }
+    }
+
+    // 主题管理
+    function applyTheme(theme) {
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      
+      $('.theme-btn').removeClass('active');
+      $(`.theme-btn[data-theme="${theme}"]`).addClass('active');
+      localStorage.setItem('theme', theme);
+      currentTheme = theme;
+    }
+
+    // 密度管理
+    function applyDensity(density) {
+      $('#csvTable').removeClass('density-compact density-comfortable density-spacious');
+      $('#csvTable').addClass(`density-${density}`);
+      
+      $('.density-btn').removeClass('active');
+      $(`.density-btn[data-density="${density}"]`).addClass('active');
+      localStorage.setItem('density', density);
+      currentDensity = density;
+    }
+
+    // 收藏管理
+    function toggleFavorite(modelId) {
+      const index = favorites.indexOf(modelId);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push(modelId);
+      }
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      updateFavoriteButtons();
+      
+      if (showFavoritesOnly) {
+        filterFavorites();
+      }
+    }
+
+    function updateFavoriteButtons() {
+      $('.favorite-btn').each(function() {
+        const modelId = $(this).data('model-id');
+        if (favorites.includes(modelId)) {
+          $(this).addClass('favorited').html('★');
+        } else {
+          $(this).removeClass('favorited').html('☆');
+        }
+      });
+    }
+
+    function filterFavorites() {
+      if (dataTable) {
+        if (showFavoritesOnly) {
+          dataTable.column(0).search(favorites.join('|'), true, false).draw();
+        } else {
+          dataTable.column(0).search('').draw();
+        }
+      }
+      
+      if (isCardView) {
+        renderCardView();
+      }
+    }
+
+    // 功能筛选函数
+    function updateCapabilityFilters() {
+      activeCapabilityFilters = [];
+      $('.capability-checkbox input:checked').each(function() {
+        const capability = $(this).parent().data('capability');
+        activeCapabilityFilters.push(capability);
+      });
+      
+      isCapabilityFilterActive = activeCapabilityFilters.length > 0;
+      
+      // 更新 UI 指示器
+      updateFilterIndicators();
+      
+      // 应用筛选
+      applyCapabilityFilters();
+    }
+    
+    function updateFilterIndicators() {
+      const count = activeCapabilityFilters.length;
+      
+      if (count > 0) {
+        $('#filterCountBadge').text(`${count} 个激活`).addClass('active');
+        $('#filterResultsInfo').addClass('active');
+      } else {
+        $('#filterCountBadge').removeClass('active');
+        $('#filterResultsInfo').removeClass('active');
+      }
+      
+      // 更新复选框样式
+      $('.capability-checkbox').each(function() {
+        const isChecked = $(this).find('input').prop('checked');
+        $(this).toggleClass('checked', isChecked);
+      });
+    }
+    
+    function applyCapabilityFilters() {
+      if (dataTable) {
+        dataTable.draw();
+      }
+      
+      if (isCardView) {
+        renderCardView();
+      }
+      
+      updateFilterResultsCount();
+    }
+    
+    function updateFilterResultsCount() {
+      if (!isCapabilityFilterActive) return;
+      
+      let filteredCount = 0;
+      
+      if (dataTable) {
+        filteredCount = dataTable.rows({ search: 'applied' }).count();
+      } else {
+        filteredCount = getFilteredData().length;
+      }
+      
+      $('#filterResultsText').text(`${filteredCount} 个模型匹配您的筛选条件`);
+    }
+    
+    function getFilteredData() {
+      let data = showFavoritesOnly ? 
+        allData.filter(row => favorites.includes(row.id)) : 
+        allData;
+      
+      if (!isCapabilityFilterActive) return data;
+      
+      return data.filter(row => {
+        if (capabilityFilterMode === 'all') {
+          // 匹配所有选定的功能
+          return activeCapabilityFilters.every(cap => row[cap] === 'Yes');
+        } else {
+          // 匹配任意选定的功能
+          return activeCapabilityFilters.some(cap => row[cap] === 'Yes');
+        }
+      });
+    }
+    
+    function clearCapabilityFilters() {
+      $('.capability-checkbox input').prop('checked', false);
+      updateCapabilityFilters();
+    }
+    
+    function applyPresetFilter(preset) {
+      clearCapabilityFilters();
+      
+      switch(preset) {
+        case 'agentic':
+          $('#filter-tool-calling').prop('checked', true);
+          $('#filter-structured-outputs').prop('checked', true);
+          break;
+        case 'reasoning':
+          $('#filter-reasoning').prop('checked', true);
+          break;
+        case 'structured':
+          $('#filter-structured-outputs').prop('checked', true);
+          $('#filter-response-format').prop('checked', true);
+          break;
+        case 'web':
+          $('#filter-web-search').prop('checked', true);
+          break;
+      }
+      
+      updateCapabilityFilters();
+    }
+
+    // 数据获取
+    async function fetchData() {
+      try {
+        // 使用 GitHub 上的公开数据源
+        const response = await fetch('https://raw.githubusercontent.com/jvrck/openrouterlist/main/data/models.json');
+        if (!response.ok) {
+          throw new Error('网络请求失败');
+        }
+        const data = await response.json();
+        allData = data;
+        
+        // 更新时间戳
+        const updatedDate = new Date().toLocaleString('zh-CN');
+        $('#updatedDate').text(`最后更新：${updatedDate}`);
+        
+        initializeTable();
+      } catch (error) {
+        console.error('获取数据失败:', error);
+        // 使用示例数据作为后备
+        useSampleData();
+      }
+    }
+
+    // 示例数据
+    function useSampleData() {
+      allData = [
+        {
+          id: 'openai/gpt-4o',
+          name: 'GPT-4o',
+          created: '2024-05-13',
+          context_length: 128000,
+          pricing: { prompt: 0.005, completion: 0.015 },
+          tool_calling: 'Yes',
+          structured_outputs: 'Yes',
+          reasoning: 'Yes',
+          response_format: 'Yes',
+          web_search: 'No'
+        },
+        {
+          id: 'anthropic/claude-3-5-sonnet',
+          name: 'Claude 3.5 Sonnet',
+          created: '2024-06-20',
+          context_length: 200000,
+          pricing: { prompt: 0.003, completion: 0.015 },
+          tool_calling: 'Yes',
+          structured_outputs: 'Yes',
+          reasoning: 'Yes',
+          response_format: 'Yes',
+          web_search: 'No'
+        },
+        {
+          id: 'google/gemini-pro',
+          name: 'Gemini Pro',
+          created: '2023-12-06',
+          context_length: 32768,
+          pricing: { prompt: 0.0005, completion: 0.0015 },
+          tool_calling: 'Yes',
+          structured_outputs: 'No',
+          reasoning: 'No',
+          response_format: 'Yes',
+          web_search: 'Yes'
+        }
+      ];
+      
+      const updatedDate = new Date().toLocaleString('zh-CN');
+      $('#updatedDate').text(`最后更新：${updatedDate}（示例数据）`);
+      
+      initializeTable();
+    }
+
+    // 初始化表格
+    function initializeTable() {
+      if ($.fn.DataTable.isDataTable('#csvTable')) {
+        $('#csvTable').DataTable().destroy();
+      }
+      
+      // 准备表格数据
+      const tableData = allData.map(model => ({
+        favorite: `<button class="favorite-btn" data-model-id="${model.id}">${favorites.includes(model.id) ? '★' : '☆'}</button>`,
+        id: `<a href="https://openrouter.ai/models/${model.id}" target="_blank">${model.id}</a>`,
+        name: model.name,
+        created: model.created,
+        context_length: model.context_length ? model.context_length.toLocaleString() : 'N/A',
+        prompt_cost: model.pricing?.prompt ? `$${model.pricing.prompt.toFixed(4)}` : 'N/A',
+        completion_cost: model.pricing?.completion ? `$${model.pricing.completion.toFixed(4)}` : 'N/A',
+        tool_calling: model.tool_calling || 'No',
+        structured_outputs: model.structured_outputs || 'No',
+        reasoning: model.reasoning || 'No',
+        response_format: model.response_format || 'No',
+        web_search: model.web_search || 'No'
+      }));
+      
+      // 创建表格头部
+      const headers = [
+        '收藏', '模型 ID', '模型名称', '创建时间', '上下文长度', 
+        '提示成本', '完成成本', '工具调用', '结构化输出', 
+        '推理能力', '响应格式', '网络搜索'
+      ];
+      
+      const headerHtml = headers.map((header, index) => `<th>${header}</th>`).join('');
+      $('#tableHeaders').html(headerHtml);
+      
+      // 创建表格主体
+      const bodyHtml = tableData.map(row => 
+        `<tr>${Object.values(row).map(cell => `<td>${cell}</td>`).join('')}</tr>`
+      ).join('');
+      $('#tableBody').html(bodyHtml);
+      
+      // 初始化 DataTable
+      dataTable = $('#csvTable').DataTable({
+        pageLength: 25,
+        responsive: true,
+        language: {
+          search: "搜索：",
+          lengthMenu: "显示 _MENU_ 条记录",
+          info: "显示第 _START_ 至 _END_ 条记录，共 _TOTAL_ 条",
+          infoEmpty: "显示第 0 至 0 条记录，共 0 条",
+          infoFiltered: "（从 _MAX_ 条记录中过滤）",
+          paginate: {
+            first: "首页",
+            last: "末页",
+            next: "下一页",
+            previous: "上一页"
+          }
+        },
+        dom: 'Bfrtip',
+        buttons: [
+          { extend: 'copy', text: '复制' },
+          { extend: 'csv', text: 'CSV' },
+          { extend: 'excel', text: 'Excel' },
+          { extend: 'pdf', text: 'PDF' },
+          { extend: 'print', text: '打印' }
+        ],
+        initComplete: function() {
+          updateFavoriteButtons();
+          updateFilterIndicators();
+        }
+      });
+      
+      // 应用保存的列可见性
+      Object.keys(columnVisibility).forEach(columnIndex => {
+        const isVisible = columnVisibility[columnIndex];
+        if (!isVisible) {
+          dataTable.column(parseInt(columnIndex)).visible(false);
+        }
+      });
+    }
+
+    // 卡片视图
+    function renderCardView() {
+      const filteredData = getFilteredData();
+      
+      const cardHtml = filteredData.map(model => `
+        <div class="model-card">
+          <div class="model-card-header">
+            <div class="model-card-title">
+              <button class="favorite-btn" data-model-id="${model.id}">${favorites.includes(model.id) ? '★' : '☆'}</button>
+              <a href="https://openrouter.ai/models/${model.id}" target="_blank">${model.name}</a>
+            </div>
+          </div>
+          <div class="model-card-details">
+            <div class="model-card-row">
+              <span class="model-card-label">模型 ID：</span>
+              <span class="model-card-value">${model.id}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">创建时间：</span>
+              <span class="model-card-value">${model.created || 'N/A'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">上下文长度：</span>
+              <span class="model-card-value">${model.context_length ? model.context_length.toLocaleString() : 'N/A'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">提示成本：</span>
+              <span class="model-card-value">${model.pricing?.prompt ? `$${model.pricing.prompt.toFixed(4)}` : 'N/A'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">完成成本：</span>
+              <span class="model-card-value">${model.pricing?.completion ? `$${model.pricing.completion.toFixed(4)}` : 'N/A'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">工具调用：</span>
+              <span class="model-card-value">${model.tool_calling === 'Yes' ? '✅' : '❌'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">结构化输出：</span>
+              <span class="model-card-value">${model.structured_outputs === 'Yes' ? '✅' : '❌'}</span>
+            </div>
+            <div class="model-card-row">
+              <span class="model-card-label">推理能力：</span>
+              <span class="model-card-value">${model.reasoning === 'Yes' ? '✅' : '❌'}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      $('#cardView').html(cardHtml);
+      updateFavoriteButtons();
+    }
+
+    // 切换视图
+    function toggleView() {
+      isCardView = !isCardView;
+      
+      if (isCardView) {
+        $('.table-view').hide();
+        $('#cardView').show();
+        $('#viewToggle').html('📊 表格视图').addClass('active');
+        renderCardView();
+      } else {
+        $('.table-view').show();
+        $('#cardView').hide();
+        $('#viewToggle').html('📱 卡片视图').removeClass('active');
+      }
+    }
+
+    // DataTable 自定义筛选函数
+    $.fn.dataTable.ext.search.push(
+      function(settings, data, dataIndex) {
+        if (!isCapabilityFilterActive) return true;
+        
+        const modelId = data[1]; // 模型 ID 列
+        const model = allData.find(m => m.id === modelId);
+        
+        if (!model) return true;
+        
+        if (capabilityFilterMode === 'all') {
+          // 匹配所有选定的功能
+          return activeCapabilityFilters.every(cap => model[cap] === 'Yes');
+        } else {
+          // 匹配任意选定的功能
+          return activeCapabilityFilters.some(cap => model[cap] === 'Yes');
+        }
+      }
+    );
+
+    // 事件处理
+    $(document).ready(function() {
+      // 应用保存的主题
+      applyTheme(currentTheme);
+      applyDensity(currentDensity);
+      
+      // 获取数据
+      fetchData();
+      
+      // 主题切换
+      $('.theme-btn').click(function() {
+        applyTheme($(this).data('theme'));
+      });
+      
+      // 密度切换
+      $('.density-btn').click(function() {
+        applyDensity($(this).data('density'));
+      });
+      
+      // 语言切换
+      $('.lang-btn').click(function() {
+        const lang = $(this).data('lang');
+        switchLanguage(lang);
+      });
+      
+      // 收藏切换
+      $(document).on('click', '.favorite-btn', function() {
+        toggleFavorite($(this).data('model-id'));
+      });
+      
+      // 收藏筛选
+      $('#favoritesToggle').click(function() {
+        showFavoritesOnly = !showFavoritesOnly;
+        $(this).toggleClass('active');
+        filterFavorites();
+      });
+      
+      // 视图切换
+      $('#viewToggle').click(function() {
+        toggleView();
+      });
+      
+      // 功能筛选
+      $('.capability-checkbox input').change(function() {
+        updateCapabilityFilters();
+      });
+      
+      // 预设筛选
+      $('.preset-btn').click(function() {
+        applyPresetFilter($(this).data('preset'));
+      });
+      
+      // 清除筛选
+      $('#clearFiltersBtn').click(function() {
+        clearCapabilityFilters();
+      });
+      
+      // 筛选模式切换
+      $('.filter-mode-btn').click(function() {
+        capabilityFilterMode = $(this).data('mode');
+        $('.filter-mode-btn').removeClass('active');
+        $(this).addClass('active');
+        applyCapabilityFilters();
+      });
+      
+      // 列可见性控制
+      $('.column-checkbox input').change(function() {
+        const columnIndex = $(this).data('column');
+        const isVisible = $(this).prop('checked');
+        
+        if (dataTable) {
+          dataTable.column(columnIndex).visible(isVisible);
+        }
+        
+        columnVisibility[columnIndex] = isVisible;
+        localStorage.setItem('columnVisibility', JSON.stringify(columnVisibility));
+      });
+      
+      // 帮助模态框
+      $('#helpBtn').click(function() {
+        $('#shortcutsModal').show();
+      });
+      
+      $('.close').click(function() {
+        $('#shortcutsModal').hide();
+      });
+      
+      $(window).click(function(event) {
+        if ($(event.target).is('.modal')) {
+          $('.modal').hide();
+        }
+      });
+      
+      // 键盘快捷键
+      $(document).keydown(function(e) {
+        // 避免在输入框中触发快捷键
+        if ($(e.target).is('input, textarea')) return;
+        
+        switch(e.key) {
+          case '/':
+            e.preventDefault();
+            $('.dataTables_filter input').focus();
+            break;
+          case 'f':
+            $('#favoritesToggle').click();
+            break;
+          case 't':
+            const currentThemeBtn = $('.theme-btn.active');
+            const nextThemeBtn = currentThemeBtn.next().length ? currentThemeBtn.next() : $('.theme-btn').first();
+            nextThemeBtn.click();
+            break;
+          case 'd':
+            const currentDensityBtn = $('.density-btn.active');
+            const nextDensityBtn = currentDensityBtn.next().length ? currentDensityBtn.next() : $('.density-btn').first();
+            nextDensityBtn.click();
+            break;
+          case 'v':
+            if ($(window).width() <= 768) {
+              $('#viewToggle').click();
+            }
+            break;
+          case 'e':
+            if (dataTable) {
+              $('.dt-button.buttons-csv').click();
+            }
+            break;
+          case 'c':
+            $('.capability-filters')[0].scrollIntoView();
+            break;
+          case 'm':
+            $('.filter-mode-btn').click();
+            break;
+          case 'x':
+            $('#clearFiltersBtn').click();
+            break;
+          case '?':
+            $('#helpBtn').click();
+            break;
+          case 'Escape':
+            $('.modal').hide();
+            break;
+        }
+      });
+      
+      // 监听系统主题变化
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+        if (currentTheme === 'system') {
+          applyTheme('system');
+        }
+      });
+      
+      // 移动端工具提示处理
+      if ($(window).width() <= 768) {
+        $('.tooltip-wrapper').on('touchstart', function() {
+          $(this).addClass('mobile-active');
+        });
+        
+        $('.tooltip-wrapper').on('touchend', function() {
+          setTimeout(() => {
+            $(this).removeClass('mobile-active');
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
